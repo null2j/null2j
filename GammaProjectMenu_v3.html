@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  width: 370px;
+  position: fixed;
+  z-index: 1;
+  top: 0px;
+  left: 10px;
+  bottom: 10px;
+  height: 100%;
+  background: #eee;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 8px 0 ;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  color: #2196F3;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #064579;
+}
+
+.main {
+  margin-left: 370px; /* Same width as the sidebar + left position in px */
+  font-size: 17px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+</style>
+</head>
+<body>
+
+<div class="sidenav">
+   <ul>
+    <li><a href="#overview">Overview</a>
+      <ul>
+        <li><a href="#api-versions">API Versions</a></li>
+        <li><a href="#terms-of-use">Guild Wars 2 API Terms of Use</a></li>
+      </ul>
+    </li>
+    <li><a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#authentication">Authentication</a></li>
+        <li><a href="#schema-versions">Schema Versions</a></li>
+      </ul>
+    </li>
+    <li><a href="#endpoints">Endpoints</a>
+      <ul>
+        <li><a href="#achievements">Achievements</a></li>
+        <li><a href="#authenticated">Authenticated</a></li>
+        <li><a href="#daily-rewards">Daily Rewards</a></li>
+        <li><a href="#game-mechanics">Game Mechanics</a></li>
+        <li><a href="#guild">Guild</a></li>
+        <li><a href="#guild-authenticated">Guild Authenticated</a></li>
+        <li><a href="#home-instance">Home Instance</a></li>
+        <li><a href="#items">Items</a></li>
+        <li><a href="#map-information">Map information</a></li>
+        <li><a href="#miscellaneous">Miscellaneous</a></li>
+        <li><a href="#story">Story</a></li>
+        <li><a href="#structured-pvp">Structured PvP</a></li>
+        <li><a href="#trading-post">Trading post</a></li>
+        <li><a href="#world-vs-world">World vs. World</a></li>
+      </ul>
+    </li>
+    <li><a href="#additional-resources">Additional Resources</a>
+      <ul>
+        <li><a href="#forums">Forums</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#wrappers">Wrappers</a></li>
+        <li><a href="#applications">Applications</a></li>
+      </ul>
+    </li>
+  </ul>
+
+</div>
+
+<div class="main">
+<h1>Guild Wars 2 API</h1>
+  <h2 id="overview">Overview</h2>
+  <p>The <b>Guild Wars 2 API</b> (application programming interface) is an interface that enables third-party applications to access data directly from the Guild Wars 2 servers. The Guild Wars 2 API is read-only access. </p>
+  <p>If you are a Guild Wars 2 player trying to find your API key learn more <a href="https://help.guildwars2.com/hc/en-us/articles/230899908-Managing-Your-ArenaNet-Account">here</a>.</p>
+  <p>Find the Guild Wars 2 API on <a href="https://github.com/arenanet/api-cdi/">GitHub</a>.</p>
+  <h3 id="api-versions">API Versions</h3>
+  <p>The current version of the API is <a href="https://wiki.guildwars2.com/wiki/API:2">version 2</a>. </p>
+  <p>Find information about version 1 of the API here. </p>
+
+  <h3 id="terms-of-use">Guild Wars 2 API Terms of Use</h3>
+  <p>Any use of the APIs must comply with ArenaNet's <a href="https://www.guildwars2.com/en/legal/guild-wars-2-content-terms-of-use/">Content Terms of Use</a> and <a href="https://www.guildwars2.com/en/legal/website-terms-of-use/">Website Terms of Use</a>. Use of the APIs constitutes acceptance of the terms and conditions contained in the ArenaNet <a href="https://www.guildwars2.com/en/legal/guild-wars-2-content-terms-of-use/">Content Terms of Use</a>, <a href="https://www.guildwars2.com/en/legal/website-terms-of-use/">Website Terms of Use</a>, and any related terms or conditions when they are posted.</p>
+
+  <h2 id="getting-started">Getting Started</h2>
+    <h3 id="authentication">Authentication</h3>
+    <i>Primary article: <a href="https://wiki.guildwars2.com/wiki/API:API_key">API:API key</a></i>
+<p>Most endpoints return general results about game data and so do not require authentication.</p>
+<p>The endpoints that can be used to return specific user or guild data require authentication via an API key in one of two ways.</p>
+<li><b>Authorization</b> request header: <span style="font-family:Courier New;">Authorization: Bearer [api key]</span></li>
+<li><b>access_token</b> query parameter: <span style="font-family:Courier New;">?access_token=[api key]</span></li>
+
+  <h3 id="schema-versions">Schema Versions</h3>
+  <i>Primary article: <a href="https://wiki.guildwars2.com/wiki/API:2#Schemas">API:2#Schemas</a></i>
+
+  <p>To allow the API the flexibility to evolve their response schemas without breaking existing applications, the APIs support the notion of schema versions on endpoints that have changed. The API will translate the response data backward from the latest version down to the requested version. Schema versions are strings that happen to be <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a> datetimes in UTC (so that string comparisons provide chronological ordering), or the value latest which will always return the latest schema from the API. If no schema version is supplied, the APIs will default to the earliest version so as to maintain backward compatibility with applications that predate the introduction of schema versions.</p>
+<p>Schema versions can be requested in one of two ways:
+</p>
+<li><b>X-Schema-Version</b> request header: <span style="font-family:Courier New;">X-Schema-Version: [schema version]</span><br>e.g., <span style="font-family:Courier New;">X-Schema-Version: 2019-02-21T00:00:00Z </span></li>
+<li><b>v</b> query parameter: <span style="font-family:Courier New;">?v=[schema version]</span>
+<br>e.g., <span style="font-family:Courier New;">?v=2019-02-21T00:00:00Z, ?v=latest</span></li>
+  
+    <h2 id="endpoints">Endpoints</h2>
+   <p>Find parameters, request examples, and response examples for each endpoint within the page for that endpoint. </p>
+<p>The <a href="https://wiki.guildwars2.com/wiki/API:2">API version 2</a> provides endpoints in the following categories:</p>
+    <h3 id="achievements">Achievements</h3>
+    These endpoints return information about <a href="https://wiki.guildwars2.com/wiki/Achievement">achievements</a>.
+
+        <h3 id="authenticated">Authenticated</h3>
+        These endpoints access player <a href="https://wiki.guildwars2.com/wiki/Account">account</a> data and require an <a href="https://wiki.guildwars2.com/wiki/API:API_key">API key</a> to view.
+        <h3 id="daily-rewards">Daily Rewards</h3>
+        These endpoints return information about daily crafting, chests, and world bosses. 
+        <h3 id="game-mechanics">Game Mechanics</h3>
+        These endpoints return information about game mechanics including mounts, pets, and skills. 
+        <h3 id="guild">Guild</h3>
+        These endpoints return information about <a href="https://wiki.guildwars2.com/wiki/Guild">guilds</a>. 
+
+        <h3 id="guild-authenticated">Guild Authenticated</h3>
+        These endpoints access guild-specific data and require an <a href="https://wiki.guildwars2.com/wiki/API:API_key">API key</a> from the guild owner to view.
+
+        <h3 id="home-instance">Home Instance</h3>
+        These endpoints return information about <a href="https://wiki.guildwars2.com/wiki/Home_instance">home instances</a>. 
+        
+        <h3 id="items">Items</h3>
+        These endpoints return information about in-game items including materials, recipes, and skins. 
+        
+        <h3 id="map-information">Map information</h3>
+        These endpoints return information about the maps and continents of Guild Wars 2. 
+        
+        <h3 id="miscellaneous">Miscellaneous</h3>
+        These endpoints return information about various aspects of Guild Wars 2 including dye colors, minis, and raids. 
+        
+        <h3 id="story">Story</h3>
+        These endpoints return information about the <a href="https://wiki.guildwars2.com/wiki/Story_Journal">story</a> and story-related quests. 
+
+        <h3 id="structured-pvp">Structured PvP</h3>
+        These endpoints return information about <a href="https://wiki.guildwars2.com/wiki/Structured_PvP">PvP</a>. 
+
+        <h3 id="trading-post">Trading post</h3>
+        These endpoints return information related to the <a href="https://wiki.guildwars2.com/wiki/Trading_Post">Trading Post</a> including current item prices. 
+
+
+        <h3 id="world-vs-world">World vs. World</h3>
+        These endpoints return information about <a href="https://wiki.guildwars2.com/wiki/World_versus_World">WvW</a>. 
+
+<h2 id="additional-resources">Additional Resources</h2>
+      For more Guild Wars 2 information visit <a href="https://www.guildwars2.com/en/">GuildWars2.com</a> and the <a href="https://wiki.guildwars2.com/wiki/Main_Page">Official Guild Wars 2 Wiki</a>. 
+        <h3 id="#forums">Forums</h3>
+        <p>Visit any of these forms to discuss the Guild Wars 2 API or get help:</p>
+<li>The official <a href="https://en-forum.guildwars2.com/forum/28-api-development/">API development forums</a></li>
+<li>The official <a href="https://github.com/arenanet/api-cdi/">API development GitHub</a></li>
+<li>The <a href="https://discord.gg/zqeHCEg">GW2 Development Community discord</a> (use the #api-discussion channel)</li>
+
+        <h3 id="#services">Services</h3>
+        <p><a href="https://wiki.guildwars2.com/wiki/API:Tile_service">Tile service</a>: Provides world map tiles to create Guild Wars 2 maps.</p>
+        
+<p><a href="https://wiki.guildwars2.com/wiki/API:Render_service">Render service</a>: Provides access to in-game assets.</p>
+<p>Additional resources are available as <a href="https://wiki.guildwars2.com/wiki/API:Assets">assets</a>.</p>
+
+        <h3 id="#wrappers">Wrappers</h3>
+        A list of wrapper libraries that provide high-level access to the API is available <a href="https://wiki.guildwars2.com/wiki/API:List_of_wrappers">here</a>.
+        <h3 id="#applications">Applications</h3>
+        A list of applications that use the API is available <a href="https://wiki.guildwars2.com/wiki/API:List_of_applications">here</a>.
+</div>  
+
+</body>
+</html> 
